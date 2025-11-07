@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boc-model-app
+  namespace: boc-model-app
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: boc-model-app } }
+  template:
+    metadata: { labels: { app: boc-model-app } }
+    spec:
+      containers:
+      - name: boc-model-app
+        image: IMAGE_PLACEHOLDER
+        ports: [ { containerPort: 8080 } ]
+        envFrom:
+        - secretRef:
+            name: boc-model-app

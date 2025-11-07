@@ -1,0 +1,19 @@
+name: boc-model-app pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    uses: Sukhman-s-SKube/gh-actions/.github/workflows/build-deploy.yaml@main
+    with:
+      IMAGE_NAME:    boc-model-app/boc-model-app
+      DOCKERFILE_PATH: ./Dockerfile
+      MANIFEST_PATH:  ./k8s
+      KUBE_NAMESPACE: boc-model-app
+    secrets:
+      HARBOR_URL:      ${{ secrets.HARBOR_URL }}
+      HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+      HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+      KUBE_CONFIG:     ${{ secrets.KUBECONFIG }}
