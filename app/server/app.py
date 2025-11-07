@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 from os import getenv
 from fastapi.middleware.cors import CORSMiddleware
 
-from server.routes.serve import router as ServeRouter
-from server.utils.s3_util import get_s3
+from app.server.routes.serve import router as ServeRouter
+from app.server.utils.s3_util import get_s3
 
 load_dotenv()
 
