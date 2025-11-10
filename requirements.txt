@@ -1,5 +1,8 @@
-fastapi
-uvicorn
-dotenv
-python-dotenv
 boto3
+clickhouse-connect
+fastapi
+numpy
+pandas
+python-dotenv
+uvicorn
+xgboost
