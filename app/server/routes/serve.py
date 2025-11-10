@@ -13,7 +13,7 @@ async def test():
     return {"Message": "Serve route is working"}
 
 
-@router.get("/predict")
+@router.get("/predict/{date}")
 async def predict(date: Optional[str] = None, service: ModelService = Depends(get_model_service)):
     try:
         result = await run_in_threadpool(service.predict, date)
