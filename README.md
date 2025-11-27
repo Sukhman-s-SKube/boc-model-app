@@ -59,19 +59,19 @@ Client → FastAPI router (/api/serve) → ModelService
 ## Environment Variables
 | Name | Required | Default | Purpose |
 | --- | --- | --- | --- |
-| `AWS_ENDPOINT_URL` | ✅ | — | Optional custom endpoint for S3-compatible storage (e.g., MinIO).
-| `AWS_REGION` | ✅ | `us-east-1` | Region passed to the boto3 client.
+| `AWS_ENDPOINT_URL` | Yes | — | Optional custom endpoint for S3-compatible storage (e.g., MinIO).
+| `AWS_REGION` | Yes | `us-east-1` | Region passed to the boto3 client.
 | `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | ✅ | — | Credentials for downloading models.
-| `MODELS_BUCKET` | ✅ | `models` | Bucket containing serialized XGBoost boosters.
-| `S3_BUCKET` | ⛔️ | `dagster` | Included for compatibility if additional assets are stored; unused by default.
-| `CH_HOST` | ✅ | `localhost` | ClickHouse host providing macro data.
-| `CH_PORT` | ✅ | `9000` | ClickHouse TCP port.
-| `CH_USER` / `CH_PASS` | ⛔️ | — | ClickHouse credentials (leave blank for default user).
-| `CH_DB` | ✅ | `default` | Database to query for macro features.
-| `CH_TABLE` | ✅ | `macro_daily` | Table supplying time-series signals.
-| `CH_SECURE` | ✅ | `false` | Set to `true` when using TLS-enabled ClickHouse endpoints.
-| `FEATURE_COLUMNS` | ✅ | `rate,cpi,y2,y5,y10,spread_2_10,oil,unemploy` | Ordered columns pulled from ClickHouse.
-| `RATE_MOVE_TOL` | ⛔️ | `0.0125` | Threshold used when summarizing prediction tolerance.
+| `MODELS_BUCKET` | Yes | `models` | Bucket containing serialized XGBoost boosters.
+| `S3_BUCKET` | No | `dagster` | Included for compatibility if additional assets are stored; unused by default.
+| `CH_HOST` | Yes | `localhost` | ClickHouse host providing macro data.
+| `CH_PORT` | Yes | `9000` | ClickHouse TCP port.
+| `CH_USER` / `CH_PASS` | No | — | ClickHouse credentials (leave blank for default user).
+| `CH_DB` | Yes | `default` | Database to query for macro features.
+| `CH_TABLE` | Yes | `macro_daily` | Table supplying time-series signals.
+| `CH_SECURE` | No | `false` | Set to `true` when using TLS-enabled ClickHouse endpoints.
+| `FEATURE_COLUMNS` | Yes | `rate,cpi,y2,y5,y10,spread_2_10,oil,unemploy` | Ordered columns pulled from ClickHouse.
+| `RATE_MOVE_TOL` | No | `0.0125` | Threshold used when summarizing prediction tolerance.
 
 `AWS_*` and `CH_*` values can be injected via Kubernetes secret `boc-model-app` or a local `.env` file.
 
@@ -146,18 +146,18 @@ jobs:
 ### Inputs
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| `IMAGE_NAME` | ✅ | — | Repository/name for the image in Harbor (supports nested paths). |
-| `DOCKERFILE_PATH` | ⛔️ | `./Dockerfile` | Location of the Dockerfile to build. |
-| `MANIFEST_PATH` | ✅ | — | File or directory containing Kubernetes YAML (supports substitution of `IMAGE_PLACEHOLDER`). |
-| `KUBE_NAMESPACE` | ⛔️ | `default` | Namespace passed to `kubectl apply`. |
-| `EXTRA_BUILD_ARGS` | ⛔️ | — | Additional `--build-arg` key-value pairs forwarded to Docker Buildx. |
+| `IMAGE_NAME` | Yes | — | Repository/name for the image in Harbor (supports nested paths). |
+| `DOCKERFILE_PATH` | No | `./Dockerfile` | Location of the Dockerfile to build. |
+| `MANIFEST_PATH` | Yes | — | File or directory containing Kubernetes YAML (supports substitution of `IMAGE_PLACEHOLDER`). |
+| `KUBE_NAMESPACE` | No | `default` | Namespace passed to `kubectl apply`. |
+| `EXTRA_BUILD_ARGS` | Yes | — | Additional `--build-arg` key-value pairs forwarded to Docker Buildx. |
 
 ### Secrets
 | Name | Required | Description |
 | --- | --- | --- |
-| `HARBOR_URL` | ✅ | Base URL of your Harbor registry (supports HTTP with `--tls-verify=false`). |
-| `HARBOR_USERNAME` / `HARBOR_PASSWORD` | ✅ | Credentials or robot token for pushing to Harbor. |
-| `KUBECONFIG` | ✅ | Base64-encoded kubeconfig granting access to the target cluster. |
+| `HARBOR_URL` | Yes | Base URL of your Harbor registry (supports HTTP with `--tls-verify=false`). |
+| `HARBOR_USERNAME` / `HARBOR_PASSWORD` | Yes | Credentials or robot token for pushing to Harbor. |
+| `KUBECONFIG` | Yes | Base64-encoded kubeconfig granting access to the target cluster. |
 
 ### How the Workflow Works
 1. Checks out the caller repository.
