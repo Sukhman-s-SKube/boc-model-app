@@ -27,11 +27,6 @@ FastAPI microservice for serving Bank of Canada policy rate predictions from the
 - **Reusable GitHub Actions pipeline** to build, push, and deploy via Harbor and any Kubernetes cluster.
 
 ## Architecture
-```
-Client → FastAPI router (/api/serve) → ModelService
-        ↘ ClickHouse (macro features) → window builder → feature matrix
-         ↘ S3 (models + metadata)     → XGBoost booster
-```
 - `app/server/app.py` wires the FastAPI application, CORS, and startup hook.
 - `app/server/routes/serve.py` defines REST endpoints for health, prediction, and hot-reload.
 - `app/server/services/model_service.py` orchestrates ClickHouse ingestion, feature engineering, inference, and drift stats.
@@ -61,7 +56,7 @@ Client → FastAPI router (/api/serve) → ModelService
 | --- | --- | --- | --- |
 | `AWS_ENDPOINT_URL` | Yes | — | Optional custom endpoint for S3-compatible storage (e.g., MinIO).
 | `AWS_REGION` | Yes | `us-east-1` | Region passed to the boto3 client.
-| `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | ✅ | — | Credentials for downloading models.
+| `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | Yes | — | Credentials for downloading models.
 | `MODELS_BUCKET` | Yes | `models` | Bucket containing serialized XGBoost boosters.
 | `S3_BUCKET` | No | `dagster` | Included for compatibility if additional assets are stored; unused by default.
 | `CH_HOST` | Yes | `localhost` | ClickHouse host providing macro data.
@@ -206,4 +201,4 @@ jobs:
 - **Drift stats missing** – expected if the stored metadata lacks `feature_stats`; retrain and upload with the new metadata payload.
 - **Kubernetes deploy stuck** – run `kubectl describe deployment boc-model-app -n boc-model-app` to confirm image pull secrets and environment variables are correct.
 
-Enjoy shipping new rate forecasts automatically! 🎯
+Enjoy shipping new rate forecasts automatically!
